@@ -3,8 +3,8 @@
 // with 2/3
 #define ENCODER_PIN_R 2
 // for anyone wanting to write "proper c++", replace the directive with a
-// constexpr variable
-constexpr int ENCODER_PIN_L = 3;
+// static constexpr variable
+static constexpr int ENCODER_PIN_L = 3;
 
 // this can be dedclared both out of scope of any function (can be read from
 // anywhere), or in the scope of the main loop (only available to the loop)
