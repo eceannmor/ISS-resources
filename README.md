@@ -14,7 +14,7 @@ More samples will be added when I confirm that we will actually be doing those p
 
 ### General examples
 * [TRSensorsExample.ino](./TRSensorsExample.ino) - front bumper sensors for the mobile robot
-* ~~motors.ino~~ - Communicating with the motors
+* [motors.ino](./motors.ino) - Communicating with the motors
 * ~~sonar.ino~~
 
 [https://www.waveshare.com/wiki/AlphaBot](https://www.waveshare.com/wiki/AlphaBot) - official documentation for the AlphaBot (projects 1-2). 
