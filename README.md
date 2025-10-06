@@ -6,7 +6,7 @@ If something is crossed out, it will be added in some time, when/if it becomes r
 ## Table of contents
 ### Project templates
 I encourage you to use these as a starting point for the projects.
-* [p1_communication_protocol.ino]()
+* [p1_communication_protocol.ino](./p1_communication_protocol.ino)
 * ~~p2_line_follower.ino~~
 * ~~p3_ball_balancer.ino~~
 
@@ -14,8 +14,10 @@ More samples will be added when I confirm that we will actually be doing those p
 
 ### General examples
 * [TRSensorsExample.ino](./TRSensorsExample.ino) - front bumper sensors for the mobile robot
-* [motors.ino]() - Communicating with the motors
+* ~~motors.ino~~ - Communicating with the motors
 * ~~sonar.ino~~
+
+[https://www.waveshare.com/wiki/AlphaBot](https://www.waveshare.com/wiki/AlphaBot) - official documentation for the AlphaBot (projects 1-2). 
 
 ### Everything else
 Code written in class, and other miscellaneous code is in the [misc/](./misc/) directory.<br/>
