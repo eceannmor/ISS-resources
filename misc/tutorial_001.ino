@@ -11,8 +11,8 @@ static constexpr int ENCODER_PIN_L = 3;
 char readByte;
 
 // https://en.cppreference.com/w/cpp/types/integer.html
-uint16_t counter_r; // arduino supports C standard library types
-uint16_t counter_l;
+volatile uint16_t counter_r; // arduino supports C standard library types
+volatile uint16_t counter_l;
 
 void inc_r() {
     counter_r++;

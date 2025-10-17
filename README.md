@@ -7,7 +7,7 @@ If something is crossed out, it will be added in some time, when/if it becomes r
 ### Project templates
 I encourage you to use these as a starting point for the projects.
 * [p1_communication_protocol.ino](./p1_communication_protocol.ino)
-* ~~p2_line_follower.ino~~
+* [p2_line_follower.ino](./p2_line_follower.ino)
 * ~~p3_ball_balancer.ino~~
 
 More samples will be added when I confirm that we will actually be doing those projects.
