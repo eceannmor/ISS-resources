@@ -7,11 +7,13 @@
 #define LEFT_MOTOR_ENABLE 6
 
 /***************************************************************************************
-* this is just a guide, you are free to change the signatures / add / remove functions
+* this is just a guide, you are free to change the signatures / add functions
 ************************************************************************************** */
 
 void process_serial();  // process serial input
-void PID();             // process PID control
+
+void PID();             // process PID control. 
+// Implement timers to make sure that the PID calculation and adjustment happens at regular intervals
 
 class Motor {
     int pinFwd;

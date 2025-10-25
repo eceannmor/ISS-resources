@@ -13,8 +13,9 @@ I encourage you to use these as a starting point for the projects.
 More samples will be added when I confirm that we will actually be doing those projects.
 
 ### General examples
-* [TRSensorsExample.ino](./TRSensorsExample.ino) - front bumper sensors for the mobile robot
-* [motors.ino](./motors.ino) - Communicating with the motors
+* [TRSensorsExample.ino](./TRSensorsExample.ino) - Front bumper sensor array.
+* [motors.ino](./motors.ino) - Communicating with the motors.
+* [regular_function_calls.ino](./regular_function_calls.ino) - Executing functions at regular intervals without halting the whole programme.
 * ~~sonar.ino~~
 
 [https://www.waveshare.com/wiki/AlphaBot](https://www.waveshare.com/wiki/AlphaBot) - official documentation for the AlphaBot (projects 1-2). 
