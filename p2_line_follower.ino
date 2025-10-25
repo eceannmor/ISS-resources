@@ -1,9 +1,9 @@
-#define RIGHT_MOTOR_IN1 A0
-#define RIGHT_MOTOR_IN2 A1
+#define RIGHT_MOTOR_FWD A0
+#define RIGHT_MOTOR_REV A1
 #define RIGHT_MOTOR_ENABLE 5
 
-#define LEFT_MOTOR_IN1 A2
-#define LEFT_MOTOR_IN2 A3
+#define LEFT_MOTOR_FWD A3
+#define LEFT_MOTOR_REV A2
 #define LEFT_MOTOR_ENABLE 6
 
 /***************************************************************************************
