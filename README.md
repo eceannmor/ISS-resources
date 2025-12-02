@@ -8,8 +8,6 @@ I encourage you to use these as a starting point for the projects.
 * [p2_line_follower.ino](./p2_line_follower.ino)
 * [p3_ball_balancer.ino](./p3_ball_balancer.ino)
 
-More samples will be added when I confirm that we will actually be doing those projects.
-
 ### General examples
 * [TRSensorsExample.ino](./TRSensorsExample.ino) - Front bumper sensor array.
 * [motors.ino](./motors.ino) - Communicating with the motors.
