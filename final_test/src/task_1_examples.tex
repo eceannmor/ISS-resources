@@ -4,32 +4,153 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,positioning,calc}
 
+% subfigures
+\usepackage{subcaption}
+
 % densely packed page
 \usepackage{fullpage}
 
 \begin{document}
-{\Huge Block diagram transformations} \\ 
-Perform block diagram reduction and determine the single transfer function $\frac{Y(s)}{R(s)}$
 
 % style config
 \tikzset{
-    block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=3em},
-    tmp/.style  = {coordinate}, 
-    sum/.style= {draw, fill=white, circle},
-    input/.style = {coordinate},
-    output/.style= {coordinate},
-    pinstyle/.style = {pin edge={to-,thin,black}}
+    block/.style = {draw, fill=white, rectangle, minimum height=2.5em, minimum width=2.5em, node distance=1.25cm},
+    tmp/.style  = {coordinate, node distance=1.25cm}, 
+    sum/.style= {draw, fill=white, circle, node distance=1.25cm},
+    input/.style = {coordinate, node distance=1.25cm},
+    output/.style= {coordinate, node distance=2cm},
+    pinstyle/.style = {pin edge={to-,thin,black}, node distance=1.25cm}
 }
+\raggedbottom
+
+{\Huge Block diagram transformations}
+
+\section*{Transformation rules}
+Transformations below do not change the transfer function of the diagram.
 
 \begin{figure}[!htb]
 \centering
-\begin{tikzpicture}[auto, node distance=1.5cm,>=latex']
+\begin{subfigure}{.5\textwidth}
+\centering
+\begin{tikzpicture}[auto, >=latex']
+    \node [input,   name=rinput]                    (rinput) {};
+    \node [block,   right of=rinput]                (G1) {$G_1$};
+    \node [block,   right of=G1]                    (G2) {$G_2$};
+    \node [block,   right of=G2]                    (G3) {$G_3$};
+    \node [output,  right of=G3]                    (output) {};
+    
+    \draw [->] (rinput) -- node{$R(s)$} (G1);
+    \draw [->] (G1)     -- (G2);
+    \draw [->] (G2)     -- (G3);
+    \draw [->] (G3)     -- node{$Y(s)$}(output);
+\end{tikzpicture}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+\begin{tikzpicture}[auto, >=latex']
+    \node [input,   name=rinput]                    (rinput) {};
+    \node [block,   right of=rinput, node distance = 2cm]                (G1) {$G1*G2*G3$};
+    \node [output,  right of=G1]                    (output) {};
+    
+    \draw [->] (rinput) -- node{$R(s)$} (G1);
+    \draw [->] (G1)     -- node{$Y(s)$}(output);
+\end{tikzpicture}
+\end{subfigure}
+\caption{Concatenating two or more blocks}
+\label{fig:concat}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\begin{subfigure}{.5\textwidth}
+\centering
+\begin{tikzpicture}[auto, >=latex']
+    \node [input,   name=rinput]                    (rinput) {};
+    \node [block,   right of=rinput]                (G1) {$G_1$};
+    \node [sum,     right of=G1]                    (sum) {};
+    \node [output,  right of=sum, node distance=1.25cm]                   (output) {};
+    \node [tmp,     below of=output]                (anchor) {};
+    \node [tmp,     below of=sum]                   (anchor2) {};
+    
+    \draw [->] (rinput) -- node{$R(s)$} (G1);
+    \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum);
+    \draw [->] (sum)    -- (output);
+    \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
+\end{tikzpicture}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+\begin{tikzpicture}[auto, >=latex']
+    \node [input,   name=rinput]                    (rinput) {};
+    \node [sum,     right of=rinput]                    (sum) {};
+    \node [block,   right of=sum]                (G1) {$G_1$};
+    \node [output,  right of=G1, node distance=1.25cm]                   (output) {};
+    \node [block,     below of=output]                (anchor) {$\frac{1}{G_1}$};
+    \node [tmp,     below of=sum]                   (anchor2) {};
+    
+    \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum);
+    \draw [->] (sum)    --  (G1);
+    \draw [->] (G1)    -- (output);
+    \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
+\end{tikzpicture}
+\end{subfigure}
+\caption{Moving a block after a summation point}
+\label{fig:sum_after}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\begin{subfigure}{.5\textwidth}
+\centering
+\begin{tikzpicture}[auto, >=latex']
+    \node [input,   name=rinput]                    (rinput) {};
+    \node [sum,     right of=rinput]                    (sum) {};
+    \node [block,   right of=sum]                (G1) {$G_1$};
+    \node [output,  right of=G1, node distance=1.25cm]                   (output) {};
+    \node [tmp,     below of=output]                (anchor) {};
+    \node [tmp,     below of=sum]                   (anchor2) {};
+    
+    \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum);
+    \draw [->] (sum)    --  (G1);
+    \draw [->] (G1)    -- (output);
+    \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
+\end{tikzpicture}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+\begin{tikzpicture}[auto, >=latex']
+    \node [input,   name=rinput]                    (rinput) {};
+    \node [block,   right of=rinput]                (G1) {$G_1$};
+    \node [sum,     right of=G1]                    (sum) {};
+    \node [output,  right of=sum, node distance=1.25cm]                   (output) {};
+    \node [block,     below of=output]                (anchor) {$G_1$};
+    \node [tmp,     below of=sum]                   (anchor2) {};
+    
+    \draw [->] (rinput) -- node{$R(s)$} (G1);
+    \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum);
+    \draw [->] (sum)    -- (output);
+    \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
+\end{tikzpicture}
+\end{subfigure}
+\caption{Moving a block before the summation point}
+\label{fig:sum_before}
+\end{figure}
+
+
+
+\section*{Practice tasks}
+
+Perform block diagram reduction and determine the single transfer function $\frac{Y(s)}{R(s)}$
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}[auto, >=latex']
     \node [input,   name=rinput]                    (rinput) {};
     \node [sum,     right of=rinput]                (sum1) {};
-    \node [block,   right of=sum1]                  (G1) {G1};
+    \node [block,   right of=sum1]                  (G1) {$G_1$};
     \node [sum,     right of=G1]                    (sum2) {};
-    \node [block,   right of=sum2]                  (G2) {G2};
-    \node [block,   below of=G1]                    (G3) {G3};
+    \node [block,   right of=sum2]                  (G2) {$G_2$};
+    \node [block,   below of=G1]                    (G3) {$G_3$};
     \node [output,  right of=G2, node distance=2cm] (output) {};
     \node [tmp,     below of=sum2]                  (split) {};
     \node [tmp,     below of=sum1]                  (split2) {};
@@ -48,15 +169,15 @@ Perform block diagram reduction and determine the single transfer function $\fra
 
 \begin{figure}[!htb]
 \centering
-\begin{tikzpicture}[auto, node distance=1.5cm,>=latex']
+\begin{tikzpicture}[auto, >=latex']
     \node [input,   name=rinput]                    (rinput) {};
     \node [sum,     right of=rinput]                (sum1) {};
     \node [sum,     right of=sum1]                  (sum2) {};
-    \node [block,   right of=sum2]                  (G1) {G1};
+    \node [block,   right of=sum2]                  (G1) {$G_1$};
     \node [tmp,     right of=G1]                    (split1) {};
-    \node [block,   right of=split1]                (G2) {G2};
-    \node [block,   above of=split1]                (G3) {G3};
-    \node [block,   below of=G1]                    (G4) {G4};
+    \node [block,   right of=split1]                (G2) {$G_2$};
+    \node [block,   above of=split1]                (G3) {$G_3$};
+    \node [block,   below of=G1]                    (G4) {$G_4$};
     \node [tmp,     above of=sum2]                  (anchor1) {};
     \node [tmp,     below of=sum1]                  (anchor2) {};
     \node [output,  right of=G2, node distance=2cm] (output) {};
@@ -77,17 +198,17 @@ Perform block diagram reduction and determine the single transfer function $\fra
 
 \begin{figure}[!htb]
 \centering
-\begin{tikzpicture}[auto, node distance=1.5cm,>=latex']
+\begin{tikzpicture}[auto, >=latex']
     \node [input,   name=rinput]                    (rinput) {};
     \node [sum,     right of=rinput]                (sum1) {};
-    \node [block,   right of=sum1]                  (G1) {G1};
+    \node [block,   right of=sum1]                  (G1) {$G_1$};
     \node [sum,     right of=G1]                    (sum2) {};
-    \node [block,   right of=sum2]                  (G2) {G2};
+    \node [block,   right of=sum2]                  (G2) {$G_2$};
     \node [tmp,     right of=G2]                    (split1) {};
     \node [tmp,     above of=split1]                (anchor1) {};
-    \node [block,   below of=split1]                (G3) {G3};
-    \node [block,   right of=split1]                (G4) {G4};
-    \node [block,   above of=sum2]                  (G5) {G5};
+    \node [block,   below of=split1]                (G3) {$G_3$};
+    \node [block,   right of=split1]                (G4) {$G_4$};
+    \node [block,   above of=sum2]                  (G5) {$G_5$};
     \node [tmp,     below of=sum2]                  (anchor2) {};
     \node [tmp,     above of=sum1]                  (anchor3) {};
     \node [output,  right of=G4, node distance=2cm] (output) {};
@@ -104,29 +225,29 @@ Perform block diagram reduction and determine the single transfer function $\fra
     \draw [->] (y)      |- (G3);
 
 \end{tikzpicture}
-\caption{Task 3} \label{fig_task2}
+\caption{Task 3} \label{fig_task3}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
-\begin{tikzpicture}[auto, node distance=1.5cm,>=latex']
+\begin{tikzpicture}[auto, >=latex']
     \node [input,   name=rinput]                    (rinput) {};
     \node [sum,     right of=rinput]                (sum1) {};
-    \node [block,   right of=sum1]                  (G1) {G1};
+    \node [block,   right of=sum1]                  (G1) {$G_1$};
     \node [sum,     right of=G1]                    (sum2) {};
-    \node [block,   right of=sum2]                  (G2) {G2};
+    \node [block,   right of=sum2]                  (G2) {$G_2$};
     \node [tmp,     right of=G2]                    (split1) {};
     \node [sum,     right of=split1]                (sum3) {};
     \node [tmp,     right of=sum3]                  (split2) {};
-    \node [block,   right of=split2]                (G3) {G3};
+    \node [block,   right of=split2]                (G3) {$G_3$};
     \node [tmp,     right of=G3]                    (split3) {};
-    \node [block,   right of=split3]                (G4) {G4};
+    \node [block,   right of=split3]                (G4) {$G_4$};
     \node [output,  right of=G4, node distance=2cm] (output) {};
-    \node [block,   above of=sum2]                  (G5) {G5};
-    \node [block,   below of=split1]                (G6) {G6};
+    \node [block,   above of=sum2]                  (G5) {$G_5$};
+    \node [block,   below of=split1]                (G6) {$G_6$};
     \node [tmp,     above of=sum1]                  (anchor1) {};
     \node [tmp,     below of=sum2]                  (anchor2) {};
-    \node [block,   above of=split2]                (G7) {G7};
+    \node [block,   above of=split2]                (G7) {$G_7$};
     \node [tmp,     above of=sum3]                  (anchor3) {};
 
     \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
@@ -145,7 +266,7 @@ Perform block diagram reduction and determine the single transfer function $\fra
     \draw [->] (G7)     -- (anchor3) -- node[pos=0.95] {$-$} (sum3);
 
 \end{tikzpicture}
-\caption{Task 4} \label{fig_task2}
+\caption{Task 4} \label{fig_task4}
 \end{figure}
 
 \end{document}
