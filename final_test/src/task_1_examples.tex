@@ -1,0 +1,78 @@
+\documentclass{article}
+
+% diagrams
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc}
+
+% densely packed page
+\usepackage{fullpage}
+
+\begin{document}
+\Huge{Block diagram transformations} \\ 
+
+% style config
+\tikzset{
+    block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=3em},
+    tmp/.style  = {coordinate}, 
+    sum/.style= {draw, fill=white, circle},
+    input/.style = {coordinate},
+    output/.style= {coordinate},
+    pinstyle/.style = {pin edge={to-,thin,black}}
+}
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}[auto, node distance=1.5cm,>=latex']
+    \node [input,   name=rinput]                    (rinput) {};
+    \node [sum,     right of=rinput]                (sum1) {};
+    \node [block,   right of=sum1]                  (G1) {G1};
+    \node [sum,     right of=G1]                    (sum2) {};
+    \node [block,   right of=sum2]                  (G2) {G2};
+    \node [block,   below of=G1]                    (G3) {G3};
+    \node [output,  right of=G2, node distance=2cm] (output) {};
+    \node [tmp,     below of=sum2]                  (split) {};
+    \node [tmp,     below of=sum1]                  (split2) {};
+    
+    \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
+    \draw [->] (sum1)   -- (G1);
+    \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum2);
+    \draw [->] (sum2)   -- (G2);
+    \draw [->] (G2)     -- node [name=y] {$Y(s)$}(output);
+    \draw [->] (y)      |- (G3);
+    \draw [->] (split)  -- node[pos=0.95] {$+$} (sum2);
+    \draw [->] (G3)     -- (split2) -- node[pos=0.95] {$+$} (sum1);
+    \end{tikzpicture}
+\caption{Task 1} \label{fig_task1}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}[auto, node distance=1.5cm,>=latex']
+    \node [input,   name=rinput]                    (rinput) {};
+    \node [sum,     right of=rinput]                (sum1) {};
+    \node [sum,     right of=sum1]                  (sum2) {};
+    \node [block,   right of=sum2]                  (G1) {G1};
+    \node [tmp,     right of=G1]                    (split1) {};
+    \node [block,   right of=split1]                (G2) {G2};
+    \node [block,   above of=split1]                (G3) {G3};
+    \node [block,   below of=G1]                    (G4) {G4};
+    \node [tmp,     above of=sum2]                  (anchor1) {};
+    \node [tmp,     below of=sum1]                  (anchor2) {};
+    \node [output,  right of=G2, node distance=2cm] (output) {};
+
+    \node [output,  right of=G2, node distance=2cm] (output) {};
+    \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
+    \draw [->] (sum1)   -- node[pos=0.95] {$+$} (sum2);
+    \draw [->] (sum2)   -- (G1);
+    \draw [->] (G1)     -- node[name=x]{} (G2);
+    \draw [->] (G3)     -- (anchor1) -- node[pos=0.95] {$-$} (sum2);
+    \draw [->] (G2)     -- node [name=y] {$Y(s)$}(output);
+    \draw [->] (y)      |- (G3);
+    \draw [->] (x)      |- (G4);
+    \draw [->] (G4)     -- (anchor2) -- node[pos=0.95] {$+$} (sum1);
+
+    \end{tikzpicture}
+\caption{Task 2} \label{fig_task2}
+\end{figure}
+
+\end{document}
