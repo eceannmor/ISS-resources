@@ -10,12 +10,18 @@
 % densely packed page
 \usepackage{fullpage}
 
+% force layout
+\usepackage{float}
+
+% larger math fonts
+\usepackage{relsize}
+
 \begin{document}
 
 % style config
 \tikzset{
     block/.style = {draw, fill=white, rectangle, minimum height=2.5em, minimum width=2.5em, node distance=1.25cm},
-    tmp/.style  = {coordinate, node distance=1.25cm}, 
+    tmp/.style  = {coordinate, node distance=1.25cm},
     sum/.style= {draw, fill=white, circle, node distance=1.25cm},
     input/.style = {coordinate, node distance=1.25cm},
     output/.style= {coordinate, node distance=2cm},
@@ -26,114 +32,222 @@
 {\Huge Block diagram transformations}
 
 \section*{Transformation rules}
-Transformations below do not change the transfer function of the diagram.
+Transformations below do not change the transfer function of the diagram. Left and right versions in each figure are equivalent.
 
 \begin{figure}[!htb]
-\centering
-\begin{subfigure}{.5\textwidth}
-\centering
-\begin{tikzpicture}[auto, >=latex']
-    \node [input,   name=rinput]                    (rinput) {};
-    \node [block,   right of=rinput]                (G1) {$G_1$};
-    \node [block,   right of=G1]                    (G2) {$G_2$};
-    \node [block,   right of=G2]                    (G3) {$G_3$};
-    \node [output,  right of=G3]                    (output) {};
-    
-    \draw [->] (rinput) -- node{$R(s)$} (G1);
-    \draw [->] (G1)     -- (G2);
-    \draw [->] (G2)     -- (G3);
-    \draw [->] (G3)     -- node{$Y(s)$}(output);
-\end{tikzpicture}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-\centering
-\begin{tikzpicture}[auto, >=latex']
-    \node [input,   name=rinput]                    (rinput) {};
-    \node [block,   right of=rinput, node distance = 2cm]                (G1) {$G1*G2*G3$};
-    \node [output,  right of=G1]                    (output) {};
-    
-    \draw [->] (rinput) -- node{$R(s)$} (G1);
-    \draw [->] (G1)     -- node{$Y(s)$}(output);
-\end{tikzpicture}
-\end{subfigure}
-\caption{Concatenating two or more blocks}
-\label{fig:concat}
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput]                    (rinput) {};
+            \node [block,   right of=rinput]                (G1) {$G_1$};
+            \node [block,   right of=G1]                    (G2) {$G_2$};
+            \node [block,   right of=G2]                    (G3) {$G_3$};
+            \node [output,  right of=G3]                    (output) {};
+
+            \draw [->] (rinput) -- node{$R(s)$} (G1);
+            \draw [->] (G1)     -- (G2);
+            \draw [->] (G2)     -- (G3);
+            \draw [->] (G3)     -- node{$Y(s)$}(output);
+        \end{tikzpicture}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput]                            (rinput) {};
+            \node [block,   right of=rinput, node distance = 2cm]   (G1) {$G1*G2*G3$};
+            \node [output,  right of=G1]                            (output) {};
+
+            \draw [->] (rinput) -- node{$R(s)$} (G1);
+            \draw [->] (G1)     -- node{$Y(s)$}(output);
+        \end{tikzpicture}
+    \end{subfigure}
+    \caption{Concatenating two or more blocks}
+    \label{fig:concat}
 \end{figure}
 
 \begin{figure}[!htb]
-\centering
-\begin{subfigure}{.5\textwidth}
-\centering
-\begin{tikzpicture}[auto, >=latex']
-    \node [input,   name=rinput]                    (rinput) {};
-    \node [block,   right of=rinput]                (G1) {$G_1$};
-    \node [sum,     right of=G1]                    (sum) {};
-    \node [output,  right of=sum, node distance=1.25cm]                   (output) {};
-    \node [tmp,     below of=output]                (anchor) {};
-    \node [tmp,     below of=sum]                   (anchor2) {};
-    
-    \draw [->] (rinput) -- node{$R(s)$} (G1);
-    \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum);
-    \draw [->] (sum)    -- (output);
-    \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
-\end{tikzpicture}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-\centering
-\begin{tikzpicture}[auto, >=latex']
-    \node [input,   name=rinput]                    (rinput) {};
-    \node [sum,     right of=rinput]                    (sum) {};
-    \node [block,   right of=sum]                (G1) {$G_1$};
-    \node [output,  right of=G1, node distance=1.25cm]                   (output) {};
-    \node [block,     below of=output]                (anchor) {$\frac{1}{G_1}$};
-    \node [tmp,     below of=sum]                   (anchor2) {};
-    
-    \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum);
-    \draw [->] (sum)    --  (G1);
-    \draw [->] (G1)    -- (output);
-    \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
-\end{tikzpicture}
-\end{subfigure}
-\caption{Moving a block after a summation point}
-\label{fig:sum_after}
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput]                        (rinput) {};
+            \node [tmp,     right of=rinput]                    (sum) {};
+            \node [block,   right of=sum]                       (G1) {$G_1$};
+            \node [output,  right of=G1, node distance=1.25cm]  (output) {};
+            \node [tmp,     below of=rinput]                    (anchor) {};
+            \node [tmp,     below of=sum]                       (anchor2) {};
+
+            \draw [->] (rinput) -- (sum) -- (G1);
+            \draw [->] (G1)     -- (output);
+            \draw [->] (sum)    -- (anchor2) -- (anchor);
+        \end{tikzpicture}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput]                            (rinput) {};
+            \node [block,   right of=rinput]                        (G1) {$G_1$};
+            \node [tmp,     right of=G1]                            (sum) {};
+            \node [output,  right of=sum, node distance=1.25cm]     (output) {};
+            \node [block,   below of=G1]                            (anchor) {$\mathlarger{\frac{1}{G_1}}$};
+            \node [tmp,     below of=sum]                           (anchor2) {};
+
+            \draw [->] (rinput) -- (G1);
+            \draw [->] (G1)     -- (sum) -- (output);
+            \draw [->] (sum)    -- (anchor2) -- (anchor);
+        \end{tikzpicture}
+    \end{subfigure}
+    \caption{Moving a block before a pickoff point}
+    \label{fig:pickoff_before}
 \end{figure}
 
 \begin{figure}[!htb]
-\centering
-\begin{subfigure}{.5\textwidth}
-\centering
-\begin{tikzpicture}[auto, >=latex']
-    \node [input,   name=rinput]                    (rinput) {};
-    \node [sum,     right of=rinput]                    (sum) {};
-    \node [block,   right of=sum]                (G1) {$G_1$};
-    \node [output,  right of=G1, node distance=1.25cm]                   (output) {};
-    \node [tmp,     below of=output]                (anchor) {};
-    \node [tmp,     below of=sum]                   (anchor2) {};
-    
-    \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum);
-    \draw [->] (sum)    --  (G1);
-    \draw [->] (G1)    -- (output);
-    \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
-\end{tikzpicture}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-\centering
-\begin{tikzpicture}[auto, >=latex']
-    \node [input,   name=rinput]                    (rinput) {};
-    \node [block,   right of=rinput]                (G1) {$G_1$};
-    \node [sum,     right of=G1]                    (sum) {};
-    \node [output,  right of=sum, node distance=1.25cm]                   (output) {};
-    \node [block,     below of=output]                (anchor) {$G_1$};
-    \node [tmp,     below of=sum]                   (anchor2) {};
-    
-    \draw [->] (rinput) -- node{$R(s)$} (G1);
-    \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum);
-    \draw [->] (sum)    -- (output);
-    \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
-\end{tikzpicture}
-\end{subfigure}
-\caption{Moving a block before the summation point}
-\label{fig:sum_before}
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput]                            (rinput) {};
+            \node [block,   right of=rinput]                        (G1) {$G_1$};
+            \node [tmp,     right of=G1]                            (sum) {};
+            \node [output,  right of=sum, node distance=1.25cm]     (output) {};
+            \node [tmp,     below of=G1]                        (anchor) {};
+            \node [tmp,     below of=sum]                           (anchor2) {};
+
+            \draw [->] (rinput) -- (G1);
+            \draw [->] (G1)     -- (sum) -- (output);
+            \draw [->] (sum)    -- (anchor2) -- (anchor);
+        \end{tikzpicture}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput]                        (rinput) {};
+            \node [tmp,     right of=rinput]                    (sum) {};
+            \node [block,   right of=sum]                       (G1) {$G_1$};
+            \node [output,  right of=G1, node distance=1.25cm]  (output) {};
+            \node [block,   below of=rinput]                    (anchor) {$G_1$};
+            \node [tmp,     below of=sum]                       (anchor2) {};
+
+            \draw [->] (rinput) -- (sum) -- (G1);
+            \draw [->] (G1)     -- (output);
+            \draw [->] (sum)    -- (anchor2) -- (anchor);
+        \end{tikzpicture}
+    \end{subfigure}
+    \caption{Moving a block after a pickoff point}
+    \label{fig:pickoff_after}
+\end{figure}
+
+\begin{figure}[!htb]
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput]                            (rinput) {};
+            \node [block,   right of=rinput]                        (G1) {$G_1$};
+            \node [sum,     right of=G1]                            (sum) {};
+            \node [output,  right of=sum, node distance=1.25cm]     (output) {};
+            \node [tmp,     below of=output]                        (anchor) {};
+            \node [tmp,     below of=sum]                           (anchor2) {};
+
+            \draw [->] (rinput) -- (G1);
+            \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum);
+            \draw [->] (sum)    -- (output);
+            \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
+        \end{tikzpicture}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput]                        (rinput) {};
+            \node [sum,     right of=rinput]                    (sum) {};
+            \node [block,   right of=sum]                       (G1) {$G_1$};
+            \node [output,  right of=G1, node distance=1.25cm]  (output) {};
+            \node [block,   below of=output]                    (anchor) {$\mathlarger{\frac{1}{G_1}}$};
+            \node [tmp,     below of=sum]                       (anchor2) {};
+
+            \draw [->] (rinput) -- node[pos=0.95] {$+$} (sum);
+            \draw [->] (sum)    --  (G1);
+            \draw [->] (G1)     -- (output);
+            \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
+        \end{tikzpicture}
+    \end{subfigure}
+    \caption{Moving a block after a summation point}
+    \label{fig:sum_after}
+\end{figure}
+
+\begin{figure}[!htb]
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput]                        (rinput) {};
+            \node [sum,     right of=rinput]                    (sum) {};
+            \node [block,   right of=sum]                       (G1) {$G_1$};
+            \node [output,  right of=G1, node distance=1.25cm]  (output) {};
+            \node [tmp,     below of=output]                    (anchor) {};
+            \node [tmp,     below of=sum]                       (anchor2) {};
+
+            \draw [->] (rinput) -- node[pos=0.95] {$+$} (sum);
+            \draw [->] (sum)    --  (G1);
+            \draw [->] (G1)     -- (output);
+            \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
+        \end{tikzpicture}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput]                        (rinput) {};
+            \node [block,   right of=rinput]                    (G1) {$G_1$};
+            \node [sum,     right of=G1]                        (sum) {};
+            \node [output,  right of=sum, node distance=1.25cm] (output) {};
+            \node [block,   below of=output]                    (anchor) {$G_1$};
+            \node [tmp,     below of=sum]                       (anchor2) {};
+
+            \draw [->] (rinput) -- (G1);
+            \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum);
+            \draw [->] (sum)    -- (output);
+            \draw [->] (anchor) -- (anchor2) -- node[pos=0.95] {$+$} (sum);
+        \end{tikzpicture}
+    \end{subfigure}
+    \caption{Moving a block before the summation point}
+    \label{fig:sum_before}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput]                            (rinput) {};
+            \node [sum,     right of=rinput]                        (sum) {};
+            \node [block,   right of=sum]                           (G1) {$G$};
+            \node [tmp,     right of=G1]                            (anchor0) {};
+            \node [output,  right of=anchor0, node distance=1.25cm] (output) {};
+            \node [tmp,     below of=anchor0]                       (anchor) {};
+            \node [tmp,     below of=sum]                           (anchor2) {};
+            \node [block,   below of=G1]                            (H) {H};
+
+            \draw [->] (rinput) -- node[pos=0.95] {$+$} (sum);
+            \draw [->] (sum)    --  (G1);
+            \draw [->] (G1)     -- (output);
+            \draw [->] (anchor0)-- (anchor) -- (H) -- (anchor2) -- node[pos=0.95] {$\pm$} (sum);
+        \end{tikzpicture}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[auto, >=latex']
+            \node [input,   name=rinput, node distance=2.5cm]                        (rinput) {};
+            \node [block,   right of=rinput, minimum width=5em, minimum height=3em, node distance=2.5cm]                    (G1) {$\mathlarger{\frac{G}{1 \mp GH}}$};
+            \node [output,  right of=sum, node distance=3.75cm] (output) {};
+
+            \draw [->] (rinput) -- (G1);
+            \draw [->] (G1)     -- (output);
+
+        \end{tikzpicture}
+    \end{subfigure}
+    \caption{Eliminating a feedback loop. Note the change from $\pm$ to $\mp$}
+    \label{fig:loop}
 \end{figure}
 
 
@@ -143,130 +257,130 @@ Transformations below do not change the transfer function of the diagram.
 Perform block diagram reduction and determine the single transfer function $\frac{Y(s)}{R(s)}$
 
 \begin{figure}[!htb]
-\centering
-\begin{tikzpicture}[auto, >=latex']
-    \node [input,   name=rinput]                    (rinput) {};
-    \node [sum,     right of=rinput]                (sum1) {};
-    \node [block,   right of=sum1]                  (G1) {$G_1$};
-    \node [sum,     right of=G1]                    (sum2) {};
-    \node [block,   right of=sum2]                  (G2) {$G_2$};
-    \node [block,   below of=G1]                    (G3) {$G_3$};
-    \node [output,  right of=G2, node distance=2cm] (output) {};
-    \node [tmp,     below of=sum2]                  (split) {};
-    \node [tmp,     below of=sum1]                  (split2) {};
-    
-    \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
-    \draw [->] (sum1)   -- (G1);
-    \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum2);
-    \draw [->] (sum2)   -- (G2);
-    \draw [->] (G2)     -- node [name=y] {$Y(s)$}(output);
-    \draw [->] (y)      |- (G3);
-    \draw [->] (split)  -- node[pos=0.95] {$+$} (sum2);
-    \draw [->] (G3)     -- (split2) -- node[pos=0.95] {$+$} (sum1);
-\end{tikzpicture}
-\caption{Task 1} \label{fig_task1}
+    \centering
+    \begin{tikzpicture}[auto, >=latex']
+        \node [input,   name=rinput]                    (rinput) {};
+        \node [sum,     right of=rinput]                (sum1) {};
+        \node [block,   right of=sum1]                  (G1) {$G_1$};
+        \node [sum,     right of=G1]                    (sum2) {};
+        \node [block,   right of=sum2]                  (G2) {$G_2$};
+        \node [block,   below of=G1]                    (G3) {$G_3$};
+        \node [output,  right of=G2, node distance=2cm] (output) {};
+        \node [tmp,     below of=sum2]                  (split) {};
+        \node [tmp,     below of=sum1]                  (split2) {};
+
+        \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
+        \draw [->] (sum1)   -- (G1);
+        \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum2);
+        \draw [->] (sum2)   -- (G2);
+        \draw [->] (G2)     -- node [name=y] {$Y(s)$}(output);
+        \draw [->] (y)      |- (G3);
+        \draw [->] (split)  -- node[pos=0.95] {$+$} (sum2);
+        \draw [->] (G3)     -- (split2) -- node[pos=0.95] {$+$} (sum1);
+    \end{tikzpicture}
+    \caption{Task 1} \label{fig_task1}
 \end{figure}
 
 \begin{figure}[!htb]
-\centering
-\begin{tikzpicture}[auto, >=latex']
-    \node [input,   name=rinput]                    (rinput) {};
-    \node [sum,     right of=rinput]                (sum1) {};
-    \node [sum,     right of=sum1]                  (sum2) {};
-    \node [block,   right of=sum2]                  (G1) {$G_1$};
-    \node [tmp,     right of=G1]                    (split1) {};
-    \node [block,   right of=split1]                (G2) {$G_2$};
-    \node [block,   above of=split1]                (G3) {$G_3$};
-    \node [block,   below of=G1]                    (G4) {$G_4$};
-    \node [tmp,     above of=sum2]                  (anchor1) {};
-    \node [tmp,     below of=sum1]                  (anchor2) {};
-    \node [output,  right of=G2, node distance=2cm] (output) {};
+    \centering
+    \begin{tikzpicture}[auto, >=latex']
+        \node [input,   name=rinput]                    (rinput) {};
+        \node [sum,     right of=rinput]                (sum1) {};
+        \node [sum,     right of=sum1]                  (sum2) {};
+        \node [block,   right of=sum2]                  (G1) {$G_1$};
+        \node [tmp,     right of=G1]                    (split1) {};
+        \node [block,   right of=split1]                (G2) {$G_2$};
+        \node [block,   above of=split1]                (G3) {$G_3$};
+        \node [block,   below of=G1]                    (G4) {$G_4$};
+        \node [tmp,     above of=sum2]                  (anchor1) {};
+        \node [tmp,     below of=sum1]                  (anchor2) {};
+        \node [output,  right of=G2, node distance=2cm] (output) {};
 
-    \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
-    \draw [->] (sum1)   -- node[pos=0.95] {$+$} (sum2);
-    \draw [->] (sum2)   -- (G1);
-    \draw [->] (G1)     -- node[name=x]{} (G2);
-    \draw [->] (G3)     -- (anchor1) -- node[pos=0.95] {$-$} (sum2);
-    \draw [->] (G2)     -- node [name=y] {$Y(s)$}(output);
-    \draw [->] (y)      |- (G3);
-    \draw [->] (x)      |- (G4);
-    \draw [->] (G4)     -- (anchor2) -- node[pos=0.95] {$+$} (sum1);
+        \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
+        \draw [->] (sum1)   -- node[pos=0.95] {$+$} (sum2);
+        \draw [->] (sum2)   -- (G1);
+        \draw [->] (G1)     -- node[name=x]{} (G2);
+        \draw [->] (G3)     -- (anchor1) -- node[pos=0.95] {$-$} (sum2);
+        \draw [->] (G2)     -- node [name=y] {$Y(s)$}(output);
+        \draw [->] (y)      |- (G3);
+        \draw [->] (x)      |- (G4);
+        \draw [->] (G4)     -- (anchor2) -- node[pos=0.95] {$+$} (sum1);
 
-\end{tikzpicture}
-\caption{Task 2} \label{fig_task2}
+    \end{tikzpicture}
+    \caption{Task 2} \label{fig_task2}
 \end{figure}
 
 \begin{figure}[!htb]
-\centering
-\begin{tikzpicture}[auto, >=latex']
-    \node [input,   name=rinput]                    (rinput) {};
-    \node [sum,     right of=rinput]                (sum1) {};
-    \node [block,   right of=sum1]                  (G1) {$G_1$};
-    \node [sum,     right of=G1]                    (sum2) {};
-    \node [block,   right of=sum2]                  (G2) {$G_2$};
-    \node [tmp,     right of=G2]                    (split1) {};
-    \node [tmp,     above of=split1]                (anchor1) {};
-    \node [block,   below of=split1]                (G3) {$G_3$};
-    \node [block,   right of=split1]                (G4) {$G_4$};
-    \node [block,   above of=sum2]                  (G5) {$G_5$};
-    \node [tmp,     below of=sum2]                  (anchor2) {};
-    \node [tmp,     above of=sum1]                  (anchor3) {};
-    \node [output,  right of=G4, node distance=2cm] (output) {};
+    \centering
+    \begin{tikzpicture}[auto, >=latex']
+        \node [input,   name=rinput]                    (rinput) {};
+        \node [sum,     right of=rinput]                (sum1) {};
+        \node [block,   right of=sum1]                  (G1) {$G_1$};
+        \node [sum,     right of=G1]                    (sum2) {};
+        \node [block,   right of=sum2]                  (G2) {$G_2$};
+        \node [tmp,     right of=G2]                    (split1) {};
+        \node [tmp,     above of=split1]                (anchor1) {};
+        \node [block,   below of=split1]                (G3) {$G_3$};
+        \node [block,   right of=split1]                (G4) {$G_4$};
+        \node [block,   above of=sum2]                  (G5) {$G_5$};
+        \node [tmp,     below of=sum2]                  (anchor2) {};
+        \node [tmp,     above of=sum1]                  (anchor3) {};
+        \node [output,  right of=G4, node distance=2cm] (output) {};
 
-    \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
-    \draw [->] (sum1)   -- (G1);
-    \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum2);
-    \draw [->] (sum2)   -- (G2);
-    \draw [->] (G2)     -- (split1) -- (G4);
-    \draw [->] (split1) -- (anchor1) -- (G5);
-    \draw [->] (G3)     -- (anchor2) -- node[pos=0.95] {$-$} (sum2);
-    \draw [->] (G5)     -- (anchor3) -- node[pos=0.95] {$-$} (sum1);
-    \draw [->] (G4)     -- node [name=y] {$Y(s)$}(output);
-    \draw [->] (y)      |- (G3);
+        \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
+        \draw [->] (sum1)   -- (G1);
+        \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum2);
+        \draw [->] (sum2)   -- (G2);
+        \draw [->] (G2)     -- (split1) -- (G4);
+        \draw [->] (split1) -- (anchor1) -- (G5);
+        \draw [->] (G3)     -- (anchor2) -- node[pos=0.95] {$-$} (sum2);
+        \draw [->] (G5)     -- (anchor3) -- node[pos=0.95] {$-$} (sum1);
+        \draw [->] (G4)     -- node [name=y] {$Y(s)$}(output);
+        \draw [->] (y)      |- (G3);
 
-\end{tikzpicture}
-\caption{Task 3} \label{fig_task3}
+    \end{tikzpicture}
+    \caption{Task 3} \label{fig_task3}
 \end{figure}
 
 \begin{figure}[!htb]
-\centering
-\begin{tikzpicture}[auto, >=latex']
-    \node [input,   name=rinput]                    (rinput) {};
-    \node [sum,     right of=rinput]                (sum1) {};
-    \node [block,   right of=sum1]                  (G1) {$G_1$};
-    \node [sum,     right of=G1]                    (sum2) {};
-    \node [block,   right of=sum2]                  (G2) {$G_2$};
-    \node [tmp,     right of=G2]                    (split1) {};
-    \node [sum,     right of=split1]                (sum3) {};
-    \node [tmp,     right of=sum3]                  (split2) {};
-    \node [block,   right of=split2]                (G3) {$G_3$};
-    \node [tmp,     right of=G3]                    (split3) {};
-    \node [block,   right of=split3]                (G4) {$G_4$};
-    \node [output,  right of=G4, node distance=2cm] (output) {};
-    \node [block,   above of=sum2]                  (G5) {$G_5$};
-    \node [block,   below of=split1]                (G6) {$G_6$};
-    \node [tmp,     above of=sum1]                  (anchor1) {};
-    \node [tmp,     below of=sum2]                  (anchor2) {};
-    \node [block,   above of=split2]                (G7) {$G_7$};
-    \node [tmp,     above of=sum3]                  (anchor3) {};
+    \centering
+    \begin{tikzpicture}[auto, >=latex']
+        \node [input,   name=rinput]                    (rinput) {};
+        \node [sum,     right of=rinput]                (sum1) {};
+        \node [block,   right of=sum1]                  (G1) {$G_1$};
+        \node [sum,     right of=G1]                    (sum2) {};
+        \node [block,   right of=sum2]                  (G2) {$G_2$};
+        \node [tmp,     right of=G2]                    (split1) {};
+        \node [sum,     right of=split1]                (sum3) {};
+        \node [tmp,     right of=sum3]                  (split2) {};
+        \node [block,   right of=split2]                (G3) {$G_3$};
+        \node [tmp,     right of=G3]                    (split3) {};
+        \node [block,   right of=split3]                (G4) {$G_4$};
+        \node [output,  right of=G4, node distance=2cm] (output) {};
+        \node [block,   above of=sum2]                  (G5) {$G_5$};
+        \node [block,   below of=split1]                (G6) {$G_6$};
+        \node [tmp,     above of=sum1]                  (anchor1) {};
+        \node [tmp,     below of=sum2]                  (anchor2) {};
+        \node [block,   above of=split2]                (G7) {$G_7$};
+        \node [tmp,     above of=sum3]                  (anchor3) {};
 
-    \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
-    \draw [->] (sum1)   -- (G1);
-    \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum2);
-    \draw [->] (sum2)   -- (G2);
-    \draw [->] (G2)     -- (split1) -- node[pos=0.95] {$+$} (sum3);
-    \draw [->] (sum3)   -- (split2) -- (G3);
-    \draw [->] (G3)     -- (split3) -- (G4);
-    \draw [->] (G4)     -- node{$Y(s)$}(output);
-    \draw [->] (split1) |- (G5);
-    \draw [->] (split2) |- (G6);
-    \draw [->] (G5)     -- (anchor1) -- node[pos=0.95] {$+$} (sum1);
-    \draw [->] (G6)     -- (anchor2) -- node[pos=0.95] {$-$} (sum2);
-    \draw [->] (split3) |- (G7);
-    \draw [->] (G7)     -- (anchor3) -- node[pos=0.95] {$-$} (sum3);
+        \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
+        \draw [->] (sum1)   -- (G1);
+        \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum2);
+        \draw [->] (sum2)   -- (G2);
+        \draw [->] (G2)     -- (split1) -- node[pos=0.95] {$+$} (sum3);
+        \draw [->] (sum3)   -- (split2) -- (G3);
+        \draw [->] (G3)     -- (split3) -- (G4);
+        \draw [->] (G4)     -- node{$Y(s)$}(output);
+        \draw [->] (split1) |- (G5);
+        \draw [->] (split2) |- (G6);
+        \draw [->] (G5)     -- (anchor1) -- node[pos=0.95] {$+$} (sum1);
+        \draw [->] (G6)     -- (anchor2) -- node[pos=0.95] {$-$} (sum2);
+        \draw [->] (split3) |- (G7);
+        \draw [->] (G7)     -- (anchor3) -- node[pos=0.95] {$-$} (sum3);
 
-\end{tikzpicture}
-\caption{Task 4} \label{fig_task4}
+    \end{tikzpicture}
+    \caption{Task 4} \label{fig_task4}
 \end{figure}
 
 \end{document}
