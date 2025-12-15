@@ -34,7 +34,7 @@
 \section*{Transformation rules}
 Transformations below do not change the transfer function of the diagram. Left and right versions in each figure are equivalent.
 
-\begin{figure}[!htb]
+\begin{figure}[H]
     \centering
     \begin{subfigure}{.5\textwidth}
         \centering
@@ -66,7 +66,7 @@ Transformations below do not change the transfer function of the diagram. Left a
     \label{fig:concat}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[H]
     \centering
     \begin{subfigure}{.5\textwidth}
         \centering
@@ -102,7 +102,7 @@ Transformations below do not change the transfer function of the diagram. Left a
     \label{fig:pickoff_before}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[H]
     \centering
     \begin{subfigure}{.5\textwidth}
         \centering
@@ -138,7 +138,7 @@ Transformations below do not change the transfer function of the diagram. Left a
     \label{fig:pickoff_after}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[H]
     \centering
     \begin{subfigure}{.5\textwidth}
         \centering
@@ -176,7 +176,7 @@ Transformations below do not change the transfer function of the diagram. Left a
     \label{fig:sum_after}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[H]
     \centering
     \begin{subfigure}{.5\textwidth}
         \centering
@@ -254,9 +254,10 @@ Transformations below do not change the transfer function of the diagram. Left a
 
 \section*{Practice tasks}
 
-Perform block diagram reduction and determine the single transfer function $\frac{Y(s)}{R(s)}$
+Perform block diagram reduction and determine the single transfer function $\frac{Y(s)}{R(s)}$. \\
+Tasks marked "extra" are of harder difficulty than what would appear on the test.
 
-\begin{figure}[!htb]
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}[auto, >=latex']
         \node [input,   name=rinput]                    (rinput) {};
@@ -281,7 +282,7 @@ Perform block diagram reduction and determine the single transfer function $\fra
     \caption{Task 1} \label{fig_task1}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}[auto, >=latex']
         \node [input,   name=rinput]                    (rinput) {};
@@ -310,7 +311,7 @@ Perform block diagram reduction and determine the single transfer function $\fra
     \caption{Task 2} \label{fig_task2}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}[auto, >=latex']
         \node [input,   name=rinput]                    (rinput) {};
@@ -342,7 +343,7 @@ Perform block diagram reduction and determine the single transfer function $\fra
     \caption{Task 3} \label{fig_task3}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}[auto, >=latex']
         \node [input,   name=rinput]                    (rinput) {};
@@ -381,6 +382,148 @@ Perform block diagram reduction and determine the single transfer function $\fra
 
     \end{tikzpicture}
     \caption{Task 4} \label{fig_task4}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[auto, >=latex']
+        \node [input,   name=rinput]                        (rinput) {};
+        \node [sum,     right of=rinput]                    (sum1) {};
+        \node [block,   right of=sum1]                      (G1) {$G_1$};
+        \node [sum,     right of=G1]                        (sum2) {};
+        \node [block,   right of=sum2]                      (G2) {$G_2$};
+        \node [tmp,     right of=G2]                        (split1) {};
+        \node [sum,     right of=split1]                    (sum3) {};
+        \node [tmp,     right of=sum3]                      (split2) {};
+        \node [block,   right of=split2]                    (G3) {$G_3$};
+        \node [tmp,     right of=G3]                        (split3) {};
+        \node [output,  right of=split3, node distance=2cm] (output) {};
+        \node [block,   above of=G2]                        (G4) {$G_4$};
+        \node [block,   above of=G4]                        (G5) {$G_5$};
+        \node [block,   below of=split2]                    (G6) {$G_6$};
+
+        \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
+        \draw [->] (sum1)   -- (G1);
+        \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum2);
+        \draw [->] (sum2)   -- (G2);
+        \draw [->] (G2)     -- (split1) -- node[pos=0.95] {$+$} (sum3);
+        \draw [->] (sum3)   -- (split2) -- (G3);
+        \draw [->] (G3)     -- (split3) -- node{$Y(s)$} (output);
+        \draw [->] (split1) |- (G4);
+        \draw [->] (split2) |- (G5);
+        \draw [->] (G4)     -| node[pos=0.95] {$+$} (sum2);
+        \draw [->] (G5)     -| node[pos=0.95] {$-$} (sum1);
+        \draw [->] (split3) |- (G6);
+        \draw [->] (G6)     -| node[pos=0.95] {$-$} (sum3);
+
+    \end{tikzpicture}
+    \caption{Task 5} \label{fig_task5}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[auto, >=latex']
+        \node [input,   name=rinput]                        (rinput) {};
+        \node [sum,     right of=rinput]                    (sum1) {};
+        \node [block,   right of=sum1]                      (G1) {$G_1$};
+        \node [sum,     right of=G1]                        (sum2) {};
+        \node [block,   right of=sum2]                      (G2) {$G_2$};
+        \node [sum,     right of=G2]                        (sum3) {};
+        \node [block,   right of=sum3]                      (G3) {$G_3$};
+        \node [tmp,     right of=G3]                        (split3) {};
+        \node [output,  right of=split3, node distance=2cm] (output) {};
+        \node [block,   above of=G3]                        (G4) {$G_4$};
+        \node [block,   below of=G3]                        (G5) {$G_5$};
+        \node [tmp,     below of=sum2]                      (anchor1) {};
+
+        \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
+        \draw [->] (sum1)   -- (G1);
+        \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum2);
+        \draw [->] (sum2)   -- (G2);
+        \draw [->] (G2)     -- node[pos=0.95] {$+$} (sum3);
+        \draw [->] (sum3)   -- (G3);
+        \draw [->] (G3)     -- (split3) -- node{$Y(s)$}(output);
+        \draw [->] (split3) |- (G4);
+        \draw [->] (split3) |- (G5);
+        \draw [->] (G5)     -- (anchor1) -- node[pos=0.95] {$-$} (sum2);
+        \draw [->] (anchor1)-| node[pos=0.95] {$-$} (sum1);
+        \draw [->] (G4)     -| node[pos=0.95] {$+$} (sum3);
+
+    \end{tikzpicture}
+    \caption{Task 6} \label{fig_task6}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[auto, >=latex']
+        \node [input,   name=rinput]                        (rinput) {};
+        \node [tmp,     right of=rinput]                    (split1) {};
+        \node [sum,     right of=split1]                    (sum1) {};
+        \node [block,   right of=sum1]                      (G1) {$G_1$};
+        \node [tmp,     right of=G1]                        (split2) {};
+        \node [sum,     right of=split2, node distance=3cm] (sum2) {};
+        \node [output,  right of=sum2, node distance=2cm]   (output) {};
+        \node [tmp,     above of=split1]                    (anchor1) {};
+        \node [sum,     below of=split2]                    (sum3) {};
+        \node [block,   below of=sum3]                      (G2) {$G_2$};
+        \node [block,   right of=G2]                        (G3) {$G_3$};
+        \node [tmp,     below of=G2]                        (split3) {};
+        \node [tmp,     below of=split3]                    (split4) {};
+        \node [block,   right of=split4]                    (G4) {$G_4$};
+
+        \draw [->] (rinput) -- node{$R(s)$} (split1) -- node[pos=0.95] {$+$} (sum1);
+        \draw [->] (sum1)   -- (G1);
+        \draw [->] (G1)     -- (split2) -- node[pos=0.95] {$+$} (sum2);
+        \draw [->] (sum2)   -- node{$Y(s)$}(output);
+        \draw [->] (split1) -- (anchor1) -| node[pos=0.95] {$+$} (sum2);
+        \draw [->] (split2) -- node[pos=0.95] {$+$} (sum3);
+        \draw [->] (sum3)   -- (G2);
+        \draw [->] (G3)     |- node[pos=0.95] {$-$} (sum3);
+        \draw [->] (G2)     -- (split4) -| node[pos=0.98] {$-$} (sum1);
+        \draw [->] (split3) -| (G3);
+        \draw [->] (split4) -- (G4);
+        \draw [->] (G4)     -| node[pos=0.98] {$+$} (sum2);
+
+    \end{tikzpicture}
+    \caption{Task 7 - extra} \label{fig_task7}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[auto, >=latex']
+        \node [input,   name=rinput]                        (rinput) {};
+        \node [tmp,     right of=rinput]                    (split1) {};
+        \node [sum,     right of=split1]                    (sum1) {};
+        \node [block,   right of=sum1]                      (G1) {$G_1$};
+        \node [tmp,     right of=G1]                        (split12) {};
+        \node [tmp,     right of=split12]                   (split2) {};
+        \node [sum,     right of=split2, node distance=3cm] (sum2) {};
+        \node [output,  right of=sum2, node distance=2cm]   (output) {};
+        \node [block,   above of=G1]                        (G5) {$G_5$};
+        \node [tmp,     above of=G5]                        (anchor1) {};
+        \node [sum,     below of=split2]                    (sum3) {};
+        \node [block,   below of=sum3]                      (G2) {$G_2$};
+        \node [block,   right of=G2]                        (G3) {$G_3$};
+        \node [tmp,     below of=G2]                        (split3) {};
+        \node [block,   left of=split3]                     (G4) {$G_4$};
+
+        \draw [->] (rinput) -- node{$R(s)$} (split1) -- node[pos=0.95] {$+$} (sum1);
+        \draw [->] (sum1)   -- (G1);
+        \draw [->] (G1)     -- (split2) -- node[pos=0.95] {$+$} (sum2);
+        \draw [->] (sum2)   -- node{$Y(s)$}(output);
+        \draw [->] (split1) |- (anchor1) -| node[pos=0.95] {$+$} (sum2);
+        \draw [->] (split2) -- node[pos=0.95] {$+$} (sum3);
+        \draw [->] (sum3)   -- (G2);
+        \draw [->] (G3)     |- node[pos=0.95] {$-$} (sum3);
+        \draw [->] (G2)     -- (split3) -| (G3);
+        \draw [->] (split3) -| node[pos=0.98] {$+$} (sum2);
+        \draw [->] (split3) -- (G4) -| node[pos=0.98] {$-$} (sum1);
+        \draw [->] (split2) |- (G5);
+        \draw [->] (G5)     -| node[pos=0.95] {$-$} (sum1);
+    
+
+    \end{tikzpicture}
+    \caption{Task 8 - extra} \label{fig_task8}
 \end{figure}
 
 \end{document}
