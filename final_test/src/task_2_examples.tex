@@ -1,0 +1,58 @@
+\documentclass{article}
+
+% subfigures
+\usepackage{subcaption}
+
+% densely packed page
+\usepackage{fullpage}
+
+% force layout
+\usepackage{float}
+
+% Layout control for itemize and enumerate
+\usepackage{enumitem}
+
+% no indentation for the start of the paragraph
+\setlength{\parindent}{0cm}
+
+\begin{document}
+
+% style config
+\raggedbottom
+
+{\Huge Fuzzy logic}
+
+\section*{Definitions}
+Each task contains sets of 1. $observations$, 2. $conclusions$, and 3. $rules$.
+\\[0.5em]
+The sets of $observations$ might not be defined for the same domain (though, you will notice that they often are), so they are marked with different variables:
+
+$\mu_A(x)$ $\longleftarrow$ fuzzy set $A$ containing values of $x$ from its domain.\\
+$\mu_B(y)$ $\longleftarrow$ fuzzy set $B$ containing values of $y$ from its domain.
+\\[0.5em]
+A set of observations will look like this:
+
+$\mu_A(x) = \{\frac{0.0}{1}, \frac{0.1}{2}, \frac{0.4}{3}, \frac{0.7}{4}, \frac{1.0}{5}\}$
+\\[0.5em]
+Please note that the set does not contain fractions. This is notation describing each element's degree of belonging.
+The objects of the set are read as follows: $\frac{0.4}{3}$ - "element $3$ belongs to set $A$ to a degree of $0.4$".
+\\[0.5em]
+As opposed to set theory you are used to, elements can "partially" belong to a set. Elements with a degree of $0.0$ fully do not belong to the set, while element of a degree of $1.0$ fully belong to the set.
+The degree is always a number between $0$ and $1$, both inclusive.
+\\[0.5em]
+Sets of conclusions are always defined on the same domain, as they describe the same variable.
+\\[0.5em]
+The set of rules is defined in a similar fashion to classical logic:
+\begin{enumerate} [noitemsep, nolistsep]
+    \item if $x$ is $\neg A$ then $z$ is $\neg N$
+    \item if $x$ is $\neg A$ $\lor$ $y$ is $B$ then $z$ is $M$
+    \item if $x$ is $A$ $\land$ $y$ is $\neg B$ then $z$ is $K$
+\end{enumerate}
+Where variables $x$ and $y$ are inputs found in the observation sets $A$ and $B$ respectively, and $z$ is an output we are trying to determine, found in conclusion sets $N$, $M$, and $K$.
+\\[0.5em]
+The goal of each task is to calculate the value of $z$ for some known values of $x$ and $y$.
+
+\section*{Practice tasks}
+Using the Zadeh s and t-norm and Mandami's implication, calculate the value of $z$ for given values $x$ and $y$. 
+
+\end{document}
