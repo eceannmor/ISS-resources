@@ -4,9 +4,11 @@ This repo contains everything for passing the classes, as well as much more deta
 ## Table of contents
 ### Project templates
 I encourage you to use these as a starting point for the projects.
-* [p1_communication_protocol.ino](./p1_communication_protocol.ino)
-* [p2_line_follower.ino](./p2_line_follower.ino)
-* [p3_ball_balancer.ino](./p3_ball_balancer.ino)
+* [p1_communication_protocol.ino](./project_1_comm_protocol/p1_communication_protocol.ino)
+* [p2_line_follower.ino](./project_2_line_follower/p2_line_follower.ino)
+* [p3_ball_balancer.ino](./project_3_ball_balancer/p3_ball_balancer.ino)
+
+Tasks for each project can be found in their respective directory.
 
 ### Final test materials
 Examples for all tasks as well as a few complete test examples are in the [final_test/](./final_test/) directory.
@@ -20,4 +22,4 @@ Examples for all tasks as well as a few complete test examples are in the [final
 
 ### Everything else
 Code written in class, and other miscellaneous code is in the [misc/](./misc/) directory.<br/>
-[printf_fix.ino](./misc/printf_fix.ino) - code to fix the `printf` function. __*Not needed for the classes*__. Please seriously, this is for your convenience only.
+[printf_fix.ino](./misc/printf_fix.ino) - code to fix the `printf` function. __*Not needed for the classes*__. Please, seriously, this is for your convenience only.
