@@ -1,0 +1,110 @@
+\documentclass{article}
+
+% diagrams
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc}
+
+% subfigures
+\usepackage{subcaption}
+
+% densely packed page
+\usepackage{fullpage}
+
+% force layout
+\usepackage{float}
+
+% larger math fonts
+\usepackage{relsize}
+
+% subfigures
+\usepackage{subcaption}
+
+% Layout control for itemize and enumerate
+\usepackage{enumitem}
+
+% Text escaping
+\usepackage{amsmath}
+
+% no indentation for the start of the paragraph
+\setlength{\parindent}{0cm}
+
+% proper spacing for text
+\newcommand*{\stext}[1]{\text{ #1 }}
+
+\begin{document}
+% style config
+\tikzset{
+    block/.style = {draw, fill=white, rectangle, minimum height=2.5em, minimum width=2.5em, node distance=1.25cm},
+    tmp/.style  = {coordinate, node distance=1.25cm},
+    sum/.style= {draw, fill=white, circle, node distance=1.25cm},
+    input/.style = {coordinate, node distance=1.25cm},
+    output/.style= {coordinate, node distance=2cm},
+    pinstyle/.style = {pin edge={to-,thin,black}, node distance=1.25cm}
+}
+\raggedbottom
+\pagenumbering{gobble}
+
+
+{\Huge ISS Final test} (group 1)
+
+\section*{Block diagram transformations}
+Perform block diagram reduction and determine the single transfer function $\frac{Y(s)}{R(s)}$. 
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[auto, >=latex']
+        \node [input,   name=rinput]                    (rinput) {};
+        \node [sum,     right of=rinput]                (sum1) {};
+        \node [block,   right of=sum1]                  (G1) {$G_1$};
+        \node [sum,     right of=G1]                    (sum2) {};
+        \node [block,   right of=sum2]                  (G2) {$G_2$};
+        \node [tmp,     right of=G2]                    (split1) {};
+        \node [tmp,     above of=split1]                (anchor1) {};
+        \node [block,   below of=split1]                (G3) {$G_3$};
+        \node [block,   right of=split1]                (G4) {$G_4$};
+        \node [block,   above of=sum2]                  (G5) {$G_5$};
+        \node [tmp,     below of=sum2]                  (anchor2) {};
+        \node [tmp,     above of=sum1]                  (anchor3) {};
+        \node [output,  right of=G4, node distance=2cm] (output) {};
+
+        \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
+        \draw [->] (sum1)   -- (G1);
+        \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum2);
+        \draw [->] (sum2)   -- (G2);
+        \draw [->] (G2)     -- (split1) -- (G4);
+        \draw [->] (split1) -- (anchor1) -- (G5);
+        \draw [->] (G3)     -- (anchor2) -- node[pos=0.95] {$-$} (sum2);
+        \draw [->] (G5)     -- (anchor3) -- node[pos=0.95] {$-$} (sum1);
+        \draw [->] (G4)     -- node [name=y] {$Y(s)$}(output);
+        \draw [->] (y)      |- (G3);
+
+    \end{tikzpicture}
+\end{figure}
+
+\section*{Fuzzy logic}
+Using the Zadeh s and t-norm and Mamdani's implication, calculate the value of $z$ for given values $x$ and $y$. \\ [0.5em]
+
+$\mu_A(x) = \{\frac{0.1}{1}, \frac{0.5}{2}, \frac{0.0}{3}, \frac{0.3}{4}, \frac{0.7}{5}\}$ \\ [0.3em]
+$\mu_B(y) = \{\frac{1.0}{15}, \frac{0.0}{30}, \frac{0.2}{45}, \frac{0.3}{60}\}$
+\\[0.7em]
+$\mu_N(z) = \{\frac{0.2}{25}, \frac{0.3}{50}, \frac{1.0}{75}\}$ \\ [0.3em]
+$\mu_M(z) = \{\frac{0.0}{25}, \frac{0.5}{50}, \frac{0.7}{75}\}$ \\ [0.3em]
+$\mu_K(z) = \{\frac{0.2}{25}, \frac{0.6}{50}, \frac{0.9}{75}\}$ \\
+
+1. if $x$ is $\neg A$ $\lor$ $y$ is $B$ then $z$ is $N$ \\
+2. if $x$ is $\neg A$ then $z$ is $M$ \\
+3. if $x$ is $\neg A$ $\land$ $y$ is $\neg B$ then $z$ is $\neg K$ \\
+
+$x=1; y=45; z=?$
+
+
+\clearpage
+{\Huge ISS Final test} (group 2)
+
+\clearpage
+{\Huge ISS Final test} (group 3)
+
+\clearpage
+{\Huge ISS Final test} (group 4)
+
+
+\end{document}
