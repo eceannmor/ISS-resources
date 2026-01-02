@@ -157,40 +157,49 @@ $x=7; y=1; z=?$
 %========================================
 {\Huge ISS Final test} (group 3)
 %----------------------------------------
-% \section*{Block diagram transformations}
-% Perform block diagram reduction and determine the single transfer function $\frac{Y(s)}{R(s)}$. 
-% \begin{figure}[H]
-%     \centering
-%     \begin{tikzpicture}[auto, >=latex']
-%         \node [input,   name=rinput]                        (rinput) {};
-%         \node [sum,     right of=rinput]                    (sum1) {};
-%         \node [block,   right of=sum1]                      (G1) {$G_1$};
-%         \node [tmp,     right of=G1]                        (anchor1) {};
-%         \node [block,   right of=anchor1]                   (G2) {$G_2$};
-%         \node [block,   below of=G1]                        (G3) {$G_3$};
-%         \node [block,   above of=anchor1]                   (G4) {$G_4$};
-%         \node [sum,     right of=G2]                        (sum2) {};
-%         \node [tmp,     right of=sum2]                      (anchor2) {};
-%         \node [block,   right of=anchor2]                   (G5) {$G_5$};
-%         \node [block,   below of=anchor2]                   (G6) {$G_6$};
-%         \node [tmp,     right of=G5]                        (anchor3) {};
-%         \node [output,  right of=G5, node distance=2cm]     (output) {};
+\section*{Block diagram transformations}
+Perform block diagram reduction and determine the single transfer function $\frac{Y(s)}{R(s)}$. 
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[auto, >=latex']
+        \node [input,   name=rinput]                            (rinput) {};
+        \node [sum,     right of=rinput]                        (sum1) {};
+        \node [block,   right of=sum1]                          (G1) {$G_1$};
+        \node [sum,     right of=G1]                            (sum2) {};
+        \node [block,   right of=sum2]                          (G2) {$G_2$};
+        \node [sum,     right of=G2]                            (sum3) {};
+        \node [tmp,     right of=sum3]                          (anchor1) {};
+        \node [block,   right of=anchor1]                       (G3) {$G_3$};
+        \node [tmp,     right of=G3]                            (anchor2) {};
+        \node [output,  right of=anchor2, node distance=2cm]    (output) {};
+        \node [block,   below of=G3]                            (G4) {$G_4$};
+        \node [block,   below of=G4]                            (G5) {$G_5$};
+        \node [block,   above of=G2]                            (G6) {$G_6$};
 
-%         \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
-%         \draw [->] (sum1)   -- (G1);
-%         \draw [->] (G1)     -- (anchor1) -- (G2);
-%         \draw [->] (G2)     -- node[pos=0.95] {$+$} (sum2);
-%         \draw [->] (anchor1)|- (G3);
-%         \draw [->] (anchor2)|- (G4);
-%         \draw [->] (sum2)   -- (anchor2) -- (G5);
-%         \draw [->] (G5)     -- node [name=y] {$Y(s)$}(output);
-%         \draw [->] (y)      |- (G6);
-%         \draw [->] (G6)     -| node[pos=0.95] {$-$} (sum2);
-%         \draw [->] (G3)     -| node[pos=0.95] {$-$} (sum1);
-%         \draw [->] (G4)     -| node[pos=0.95] {$-$} (sum1);
+        \draw [->] (rinput) -- node{$R(s)$} node[pos=0.95] {$+$} (sum1);
+        \draw [->] (G3)     -- (anchor2) -- node {$Y(s)$}(output);
+        \draw [->] (sum1)   -- (G1);
+        \draw [->] (sum2)   -- (G2);
+        \draw [->] (sum3)   -- (anchor1) -- (G3);
+        \draw [->] (G1)     -- node[pos=0.95] {$+$} (sum2);
+        \draw [->] (G2)     -- node[pos=0.95] {$+$} (sum3);
+        \draw [->] (anchor2)|- (G4);
+        \draw [->] (anchor2)|- (G5);
+        \draw [->] (anchor1)|- (G6);
+        \draw [->] (G4)     -| node[pos=0.95] {$-$} (sum3);
+        \draw [->] (G5)     -| node[pos=0.98] {$-$} (sum1);
+        \draw [->] (G6)     -| node[pos=0.95] {$-$} (sum2);
+        
+        
+        % \draw [->] (G1)     -- (anchor1) -- (G2);
+        % \draw [->] (anchor2)|- (G4);
+        % \draw [->] (sum2)   -- (anchor2) -- (G5);
+        % \draw [->] (y)      |- (G6);
+        % \draw [->] (G3)     -| node[pos=0.95] {$-$} (sum1);
+        % \draw [->] (G4)     -| node[pos=0.95] {$-$} (sum1);
 
-%     \end{tikzpicture}
-% \end{figure}
+    \end{tikzpicture}
+\end{figure}
 %----------------------------------------
 \section*{Fuzzy logic}
 Using the Zadeh s and t-norm and Mamdani's implication, calculate the value of $z$ for given values $x$ and $y$. \\ [0.5em]
